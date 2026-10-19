@@ -1,5 +1,3 @@
-import type { NextConfig } from "next";
-
 const isDev = process.env.NODE_ENV !== "production";
 
 // Content-Security-Policy: hanya sumber dari situs sendiri. 'unsafe-inline' dibutuhkan skrip kecil bawaan Next.js & skrip tema.
@@ -27,7 +25,8 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
 ];
 
-const config: NextConfig = {
+/** @type {import("next").NextConfig} */
+const config = {
   poweredByHeader: false,
   async headers() {
     return [
