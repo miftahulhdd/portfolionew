@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f6f5f0;
+  --surface: #ffffff;
+  --surface-2: #efede6;
+  --ink: #122021;
+  --muted: #566665;
+  --line: #e2e0d6;
+  --brand: #1f7f8e;
+  --brand-ink: #ffffff;
+  --brand-soft: #d9eef0;
+  --ring: rgba(31, 127, 142, 0.35);
+}
+.dark {
+  --bg: #0c1314;
+  --surface: #121b1c;
+  --surface-2: #182425;
+  --ink: #e7efee;
+  --muted: #93a6a4;
+  --line: #223033;
+  --brand: #5cc0cf;
+  --brand-ink: #06161a;
+  --brand-soft: #15343a;
+  --ring: rgba(92, 192, 207, 0.4);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  color-scheme: light;
+}
+html.dark { color-scheme: dark; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--brand); color: var(--brand-ink); }
+
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+
+/* Transisi halus saat ganti tema (kelas dipasang sebentar oleh ThemeToggle) */
+html.theme-anim,
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition: background-color .3s ease, color .3s ease, border-color .3s ease,
+    fill .3s ease, stroke .3s ease, box-shadow .3s ease !important;
+}
+
+/* Muncul halus saat di-scroll (diaktifkan hanya jika JS aktif) */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(22px) scale(.985);
+  transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1);
+  transition-delay: var(--d, 0ms);
+  will-change: opacity, transform;
+}
+html.js .reveal[data-shown="true"] { opacity: 1; transform: none; will-change: auto; }
+
+@keyframes shrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+/* Skeleton */
+@keyframes shimmer { to { background-position: -200% 0; } }
+.skeleton {
+  background: linear-gradient(100deg, var(--surface-2) 30%, color-mix(in srgb, var(--line) 70%, var(--surface-2)) 50%, var(--surface-2) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: .5rem;
+}
+
+/* ---------- komponen kecil ---------- */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+}
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .65rem 1.15rem; border-radius: .75rem; font-weight: 600; font-size: .9rem;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+  cursor: pointer; border: 1px solid transparent;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--brand); color: var(--brand-ink); }
+.btn-primary:hover { filter: brightness(1.08); }
+.btn-ghost { border-color: var(--line); background: var(--surface); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--brand); }
+.btn-danger { color: #c0392b; border-color: color-mix(in srgb, #c0392b 35%, var(--line)); background: var(--surface); }
+.btn-danger:hover { background: color-mix(in srgb, #c0392b 10%, var(--surface)); }
+.btn-sm { padding: .4rem .75rem; font-size: .8rem; border-radius: .6rem; }
+
+.field {
+  width: 100%; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--line); border-radius: .7rem; padding: .65rem .85rem; font-size: .95rem;
+  transition: border-color .15s, box-shadow .15s;
+}
+.field:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--ring); }
+.field::placeholder { color: color-mix(in srgb, var(--muted) 70%, transparent); }
+textarea.field { resize: vertical; min-height: 5rem; }
+.label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: .35rem; color: var(--muted); }
+.chip {
+  display: inline-flex; align-items: center; padding: .3rem .8rem; border-radius: 999px;
+  border: 1px solid var(--line); font-size: .82rem; font-weight: 500; background: var(--surface);
+  transition: all .15s; cursor: pointer; color: var(--muted);
+}
+.chip:hover { border-color: var(--brand); color: var(--ink); }
+.chip[data-active="true"] { background: var(--brand); border-color: var(--brand); color: var(--brand-ink); }
+.badge {
+  display: inline-block; padding: .15rem .6rem; border-radius: 999px; font-size: .72rem; font-weight: 600;
+  background: var(--brand-soft); color: var(--brand);
+}
+
+/* ---------- artikel laporan ---------- */
+.article p { line-height: 1.8; margin: 0 0 1rem; color: color-mix(in srgb, var(--ink) 88%, var(--bg)); }
+.article code:not(pre code) {
+  font-family: var(--font-mono); font-size: .86em; background: var(--surface-2);
+  padding: .12em .4em; border-radius: .35rem; border: 1px solid var(--line);
+}
+.code-block pre.shiki {
+  margin: 0; padding: 1rem 1.1rem; overflow-x: auto; font-family: var(--font-mono);
+  font-size: .83rem; line-height: 1.65; background: transparent !important;
+}
+.code-block .shiki span { color: var(--shiki-light); }
+.dark .code-block .shiki span { color: var(--shiki-dark); }
+.code-block pre.shiki code { font-family: inherit; }
+
+@media print {
+  nav, footer, .no-print { display: none !important; }
+  body { background: white; color: black; }
+}
